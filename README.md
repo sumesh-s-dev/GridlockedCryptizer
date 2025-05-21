@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Gridlocked Cryptizer - Vehicle Auction System
 
 A Java Swing application for a vehicle auction system where users can register, login, and place bids on vehicles.
@@ -80,3 +81,7 @@ The following improvements have been made to the project:
    - Created a comprehensive README with setup instructions
    - Added SQL script for manual database setup
    - Added comments to explain key functionality
+=======
+# GridlockedCryptizer
+GridlockedCryptizer is a simple and secure file encryption-decryption tool built using Java and MySQL. It allows users to encrypt and decrypt text-based data using a customized grid-based cipher and stores user data securely in a database. This project was developed as part of my BCA final year project
+>>>>>>> 9b74b7d31cafbfbc75c47f3edbd7de61bb9cc4bf
