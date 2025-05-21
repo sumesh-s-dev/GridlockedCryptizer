@@ -3,9 +3,15 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.List;
 
+import model.Bidder;
+import model.Vehicle;
+import dao.DatabaseConnection;
+import util.LoggerUtil;
+
 public class GridlockedCryptizer {
     private JFrame frame;
     private Bidder currentBidder;
+    private static final LoggerUtil logger = LoggerUtil.getLogger(GridlockedCryptizer.class);
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
@@ -14,7 +20,7 @@ public class GridlockedCryptizer {
                 boolean dbConnected = false;
                 try {
                     DatabaseConnection.getConnection().close();
-                    System.out.println("Database connection successful");
+                    logger.info("Database connection successful");
                     dbConnected = true;
                 } catch (Exception e) {
                     String errorMessage = "Database connection error: " + e.getMessage() + 
@@ -22,9 +28,7 @@ public class GridlockedCryptizer {
                         "1. MySQL Server is running\n" +
                         "2. The database 'gridlocked_cryptizer' exists\n" +
                         "3. The MySQL JDBC driver is in the lib directory\n" +
-                        "4. The database credentials in DatabaseConnection.java are correct\n\n" +
-                        "To fix the credentials issue, open src/DatabaseConnection.java and update the PASSWORD constant " +
-                        "on line 13 with your actual MySQL root password.";
+                        "4. The database credentials in config.properties are correct";
 
                     // Show error but allow application to continue
                     int option = JOptionPane.showOptionDialog(
@@ -38,8 +42,7 @@ public class GridlockedCryptizer {
                         "Exit"
                     );
 
-                    System.err.println(errorMessage);
-                    e.printStackTrace();
+                    logger.error("Database connection error", e);
 
                     if (option != JOptionPane.YES_OPTION) {
                         return;
@@ -60,7 +63,7 @@ public class GridlockedCryptizer {
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, "Error starting application: " + e.getMessage(), 
                     "Application Error", JOptionPane.ERROR_MESSAGE);
-                e.printStackTrace();
+                logger.error("Error starting application", e);
             }
         });
     }
@@ -172,7 +175,12 @@ public class GridlockedCryptizer {
                 JOptionPane.showMessageDialog(frame, "Registration successful! You can now login.");
                 emailField.setText("");
             } else {
-                JOptionPane.showMessageDialog(frame, "Registration failed. Username may already exist.");
+                JOptionPane.showMessageDialog(frame, "Registration failed. Username may already exist or password doesn't meet requirements.\n\n" +
+                    "Password requirements:\n" +
+                    "- At least 8 characters\n" +
+                    "- At least 1 uppercase letter\n" +
+                    "- At least 1 lowercase letter\n" +
+                    "- At least 1 digit");
             }
         });
 

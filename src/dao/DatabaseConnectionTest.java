@@ -1,16 +1,17 @@
+package dao;
+
 import java.sql.Connection;
 import java.sql.SQLException;
-import dao.DatabaseConnection;
 
 public class DatabaseConnectionTest {
     public static void main(String[] args) {
         System.out.println("Testing database connection...");
-
+        
         try {
             // Try to get a connection
             Connection conn = DatabaseConnection.getConnection();
             System.out.println("Database connection successful!");
-
+            
             // Close the connection
             conn.close();
             System.out.println("Connection closed successfully.");
