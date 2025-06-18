@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GridlockedCryptizer - Vehicle Auction Management</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-car"></i>
+                    <h1>GridlockedCryptizer</h1>
+                </div>
+                <nav class="nav">
+                    <a href="#" class="nav-link active" data-page="dashboard">Dashboard</a>
+                    <a href="#" class="nav-link" data-page="vehicles">Vehicles</a>
+                    <a href="#" class="nav-link" data-page="auctions">Auctions</a>
+                    <a href="#" class="nav-link" data-page="users">Users</a>
+                    <a href="#" class="nav-link" data-page="reports">Reports</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="container">
+            <!-- Dashboard Page -->
+            <div id="dashboard-page" class="page active">
+                <!-- Stats Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <h3>Total Vehicles</h3>
+                            <i class="fas fa-car"></i>
+                        </div>
+                        <div class="stat-value" id="total-vehicles">0</div>
+                        <div class="stat-label">In inventory</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <h3>Active Auctions</h3>
+                            <i class="fas fa-gavel"></i>
+                        </div>
+                        <div class="stat-value" id="active-auctions">0</div>
+                        <div class="stat-label">Currently running</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <h3>Total Users</h3>
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-value" id="total-users">0</div>
+                        <div class="stat-label">Registered bidders</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <h3>Total Revenue</h3>
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="stat-value" id="total-revenue">$0</div>
+                        <div class="stat-label">This month</div>
+                    </div>
+                </div>
+
+                <!-- Search and Actions -->
+                <div class="toolbar">
+                    <div class="search-container">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="search-input" placeholder="Search vehicles..." class="search-input">
+                    </div>
+                    <div class="actions">
+                        <button class="btn btn-primary" onclick="showAddVehicleModal()">
+                            <i class="fas fa-plus"></i> Add Vehicle
+                        </button>
+                        <button class="btn btn-secondary" onclick="showCreateAuctionModal()">
+                            <i class="fas fa-gavel"></i> Create Auction
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Vehicles Grid -->
+                <div id="vehicles-grid" class="vehicles-grid">
+                    <!-- Vehicles will be loaded here -->
+                </div>
+
+                <!-- Loading State -->
+                <div id="loading" class="loading">
+                    <div class="spinner"></div>
+                    <p>Loading GridlockedCryptizer...</p>
+                </div>
+            </div>
+
+            <!-- Vehicles Page -->
+            <div id="vehicles-page" class="page">
+                <div class="page-header">
+                    <h2><i class="fas fa-car"></i> Vehicle Management</h2>
+                    <button class="btn btn-primary" onclick="showAddVehicleModal()">
+                        <i class="fas fa-plus"></i> Add Vehicle
+                    </button>
+                </div>
+
+                <!-- Filters -->
+                <div class="filters-card">
+                    <h3><i class="fas fa-filter"></i> Filters</h3>
+                    <div class="filters-grid">
+                        <div class="filter-group">
+                            <input type="text" id="vehicle-search" placeholder="Search vehicles..." class="filter-input">
+                        </div>
+                        <div class="filter-group">
+                            <select id="status-filter" class="filter-select">
+                                <option value="all">All Statuses</option>
+                                <option value="active">Active</option>
+                                <option value="upcoming">Upcoming</option>
+                                <option value="ended">Ended</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <select id="condition-filter" class="filter-select">
+                                <option value="all">All Conditions</option>
+                                <option value="Excellent">Excellent</option>
+                                <option value="Good">Good</option>
+                                <option value="Fair">Fair</option>
+                                <option value="Poor">Poor</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <button class="btn btn-secondary" onclick="clearFilters()">Clear Filters</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="vehicles-list" class="vehicles-grid">
+                    <!-- Vehicles will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Auctions Page -->
+            <div id="auctions-page" class="page">
+                <div class="page-header">
+                    <h2><i class="fas fa-gavel"></i> Live Auctions</h2>
+                    <button class="btn btn-primary" onclick="showCreateAuctionModal()">
+                        <i class="fas fa-plus"></i> Create Auction
+                    </button>
+                </div>
+
+                <!-- Auction Stats -->
+                <div class="auction-stats">
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <h3>Active Auctions</h3>
+                            <i class="fas fa-gavel"></i>
+                        </div>
+                        <div class="stat-value" id="auction-active-count">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <h3>Total Bids Today</h3>
+                            <i class="fas fa-dollar-sign"></i>
+                        </div>
+                        <div class="stat-value" id="auction-bids-count">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <h3>Ending Soon</h3>
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="stat-value" id="auction-ending-count">0</div>
+                    </div>
+                </div>
+
+                <div id="auctions-list" class="auctions-list">
+                    <!-- Auctions will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Add Vehicle Modal -->
+    <div id="add-vehicle-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add New Vehicle</h3>
+                <button class="modal-close" onclick="closeModal('add-vehicle-modal')">&times;</button>
+            </div>
+            <form id="add-vehicle-form" class="modal-body">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="make">Make *</label>
+                        <input type="text" id="make" name="make" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="model">Model *</label>
+                        <input type="text" id="model" name="model" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="year">Year *</label>
+                        <input type="number" id="year" name="year" min="1900" max="2025" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="mileage">Mileage *</label>
+                        <input type="number" id="mileage" name="mileage" min="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="condition">Condition *</label>
+                        <select id="condition" name="condition" required>
+                            <option value="">Select condition</option>
+                            <option value="Excellent">Excellent</option>
+                            <option value="Good">Good</option>
+                            <option value="Fair">Fair</option>
+                            <option value="Poor">Poor</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="starting-bid">Starting Bid ($) *</label>
+                        <input type="number" id="starting-bid" name="startingBid" min="0" step="0.01" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea id="description" name="description" rows="3"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('add-vehicle-modal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Add Vehicle</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Bid Modal -->
+    <div id="bid-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Place Bid</h3>
+                <button class="modal-close" onclick="closeModal('bid-modal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="bid-vehicle-info"></div>
+                <form id="bid-form">
+                    <div class="form-group">
+                        <label for="bid-amount">Bid Amount ($)</label>
+                        <input type="number" id="bid-amount" name="bidAmount" min="0" step="0.01" required>
+                        <small class="form-help">Minimum bid: <span id="min-bid">$0</span></small>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" onclick="closeModal('bid-modal')">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Place Bid</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
