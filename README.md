@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 
 # Gridlocked Cryptizer - Vehicle Auction System
 
